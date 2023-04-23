@@ -1,19 +1,20 @@
 @extends('layouts.app')
 
 @push('styles')
-<style>
-    @keyframes rotate {
-        from {
-            transform: rotate(0deg);
+    <style>
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
         }
-        to {
-            transform: rotate(360deg);
+
+        .refresh {
+            animation: rotate 1.5s linear infinite;
         }
-    }
-    .refresh {
-        animation: rotate 1.5s linear infinite;
-    }
-</style>
+    </style>
 @endpush
 
 @section('content')
@@ -25,8 +26,8 @@
 
                     <div class="card-body">
                         <div class="text-center">
-                            <img id="circle" class="refresh" src="{{ asset('img/circle.png') }}" alt="image"
-                                height="250" width="250">
+                            <img id="circle" class="" src="{{ asset('img/circle.png') }}" alt="image"
+                                 height="250" width="250">
                             <p id="winner" class="display-1 d-none text-primary"></p>
                             <hr/>
 
@@ -53,5 +54,37 @@
 @endsection
 
 @push('scripts')
-    <script></script>
+    <script>
+        const circleElement = document.getElementById('circle');
+        const timerElement = document.getElementById('timer');
+        const winnerElement = document.getElementById('winner');
+        const resultElement = document.getElementById('result');
+        const betElement = document.getElementById('user_bet');
+
+        Echo.channel('game')
+            .listen('RemainingTimeChanged', function (e) {
+                timerElement.innerText = e.time;
+                circleElement.classList.add('refresh');
+                winnerElement.classList.add('d-none');
+                resultElement.innerText = '';
+                resultElement.classList.remove('text-success');
+                resultElement.classList.remove('text-danger');
+            })
+            .listen('WinnerNumberGenerated', function (e) {
+                circleElement.classList.remove('refresh');
+                let winner = e.number;
+
+                winnerElement.innerText = winner;
+                winnerElement.classList.remove('d-none');
+
+                let bet = betElement[betElement.selectedIndex].innerText;
+                if (bet === winner) {
+                    resultElement.innerText = 'You WIN';
+                    resultElement.classList.add('text-success');
+                } else {
+                    resultElement.innerText = 'You LOSE';
+                    resultElement.classList.add('text-danger');
+                }
+            });
+    </script>
 @endpush
