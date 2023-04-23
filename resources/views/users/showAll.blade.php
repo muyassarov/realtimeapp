@@ -37,20 +37,17 @@
         }
     </script>
     <script>
-        window.addEventListener('load', function () {
-            Echo.channel('users')
-                .listen('userCreated', function (e) {
-                    console.log(e);
-                    addUserToList(e.user);
-                })
-                .listen('userUpdated', function (e) {
-                    const el = document.getElementById(e.user.id.toString());
-                    el.innerText = e.user.name;
-                })
-                .listen('userDeleted', function (e) {
-                    const el = document.getElementById(e.user.id.toString());
-                    el.parentNode.removeChild(el);
-                });
-        });
+        Echo.channel('users')
+            .listen('UserCreated', function (e) {
+                addUserToList(e.user);
+            })
+            .listen('UserUpdated', function (e) {
+                const el = document.getElementById(e.user.id.toString());
+                el.innerText = e.user.name;
+            })
+            .listen('UserDeleted', function (e) {
+                const el = document.getElementById(e.user.id.toString());
+                el.parentNode.removeChild(el);
+            });
     </script>
 @endpush

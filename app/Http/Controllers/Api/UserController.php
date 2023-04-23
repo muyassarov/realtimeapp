@@ -45,8 +45,7 @@ class UserController extends Controller
         if (isset($data['password'])) {
             $data['password'] = bcrypt($data['password']);
         }
-        $user->fill($data);
-        $user->save();
+        $user->update($data);
         return $user;
     }
 
