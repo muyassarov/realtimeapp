@@ -74,11 +74,12 @@
         </nav>
 
         <main class="py-4">
+            <div id="notification" class="alert alert-success mx-3 invisible">Login</div>
             @yield('content')
         </main>
     </div>
     <!-- Scripts -->
-    @stack('scripts')
     <script src="{{ asset('js/app.js') }}"></script>
+    @stack('scripts')
 </body>
 </html>
