@@ -32,7 +32,7 @@
             const usersElement = document.getElementById('users-list');
             let el = document.createElement('li');
             el.setAttribute('id', user.id);
-            el.innerText = user.name;
+            el.innerText = user.name + ' (' + user.email + ')';
             usersElement.appendChild(el);
         }
     </script>
