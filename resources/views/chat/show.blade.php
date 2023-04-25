@@ -37,8 +37,6 @@
                             <div class="col-2">
                                 <p><strong>Online Now</strong></p>
                                 <ul id="users" class="list-unstyled overflow-auto text-info" style="height: 45vh;">
-                                    <li>Test1</li>
-                                    <li>Test2</li>
                                 </ul>
                             </div>
                         </div>
@@ -50,5 +48,28 @@
 @endsection
 
 @push('scripts')
-    <script></script>
+    <script>
+        const usersElement = document.getElementById('users');
+
+        function addUserToList(user) {
+            let el = document.createElement('li');
+            el.setAttribute('id', user.id);
+            el.innerText = user.name;
+            usersElement.appendChild(el);
+        }
+
+        Echo.join('chat')
+            .here((users) => {
+                users.forEach((user) => {
+                    addUserToList(user);
+                });
+            })
+            .joining((user) => {
+                addUserToList(user);
+            })
+            .leaving((user) => {
+                const el = document.getElementById(user.id.toString());
+                el.parentNode.removeChild(el);
+            });
+    </script>
 @endpush
